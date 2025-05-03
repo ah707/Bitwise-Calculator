@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>🧠 Bitwise Calculator</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(to right, #ece9e6, #ffffff);
+            color: #333;
+            text-align: center;
+            padding: 40px 20px;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        h1 {
+            color: #222;
+            margin-bottom: 30px;
+            font-size: 2em;
+        }
+
+        form {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+            margin-bottom: 30px;
+            max-width: 500px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        input[type="number"],
+        select {
+            width: calc(100% - 24px);
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 1em;
+            box-sizing: border-box;
+            transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+        input[type="number"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 25px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .result-area {
+            margin-top: 20px;
+            font-size: 1.1em;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+            max-width: 600px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+         .error {
+             color: #dc3545;
+             font-weight: bold;
+         }
+
+         .success {
+             color: #28a745;
+             font-weight: bold;
+         }
+
+        .binary-output {
+            background: #e9ecef;
+            padding: 20px;
+            border-radius: 8px;
+            display: inline-block;
+            text-align: left;
+            font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+            white-space: pre;
+            margin-top: 20px;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+            line-height: 1.6;
+            overflow-x: auto;
+        }
+
+         @media (max-width: 600px) {
+             form, .result-area {
+                 padding: 20px;
+             }
+             input[type="number"], select {
+                 width: calc(100% - 20px);
+             }
+              button {
+                  width: 100%;
+              }
+         }
+
+    </style>
+</head>
+<body>
+    <h1>🔢 Bitwise Operation Tool</h1>
+    <form method="POST">
+        <input type="number" name="a" placeholder="Enter A" value="{{ a_val }}" required>
+        <input type="number" name="b" placeholder="Enter B (Skip for not)" value="{{ b_val }}">
+        <br>
+        <select name="operation" required>
+            <option value="AND" {% if selected_op == 'AND' %}selected{% endif %}>AND (&)</option>
+            <option value="OR" {% if selected_op == 'OR' %}selected{% endif %}>OR (|)</option>
+            <option value="XOR" {% if selected_op == 'XOR' %}selected{% endif %}>XOR (^)</option>
+            <option value="NOT" {% if selected_op == 'NOT' %}selected{% endif %}>NOT (~)</option>
+            <option value="LSHIFT" {% if selected_op == 'LSHIFT' %}selected{% endif %}>LEFT SHIFT (<<)</option>
+            <option value="RSHIFT" {% if selected_op == 'RSHIFT' %}selected{% endif %}>RIGHT SHIFT (>>)</option>
+        </select>
+        <br>
+        <button type="submit">✅ Calculate</button>
+    </form>
+
+    {% if result_text or binary_calculation %}
+    <div class="result-area">
+        {% if result_text %}
+             <p>🧮 <b>Result (Decimal):</b>
+             {% if "⚠️" in result_text %}
+                 <span class="error">{{ result_text }}</span>
+             {% else %}
+                 <span class="success">{{ result_text }}</span>
+             {% endif %}
+             </p>
+         {% endif %}
+
+        {% if binary_calculation %}
+            <div class="binary-output">
+                {{ binary_calculation }}
+            </div>
+        {% endif %}
+    </div>
+    {% endif %}
+</body>
+</html>
